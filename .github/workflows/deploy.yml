@@ -20,19 +20,22 @@ jobs:
           flutter-version: '3.19.3'
           channel: 'stable'
       
+      - name: List directory structure
+        run: |
+          pwd
+          ls -la
+          
       - name: Get dependencies
-        working-directory: ./comfee
         run: flutter pub get
           
       - name: Build
-        working-directory: ./comfee
         run: flutter build web --release --base-href "/planifyapp/"
         
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./comfee/build/web
+          publish_dir: build/web
           force_orphan: true
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com' 
