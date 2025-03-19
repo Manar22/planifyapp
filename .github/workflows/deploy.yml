@@ -4,26 +4,33 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      
+      - uses: actions/checkout@v3
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.x'
+          flutter-version: '3.19.3'
           channel: 'stable'
-          
-      - name: Install dependencies
+      
+      - name: Get dependencies
         run: flutter pub get
+          
+      - name: Build
+        run: flutter build web --release --base-href "/planifyapp/"
         
-      - name: Build web
-        run: flutter build web --base-href "/planifyapp/"
-        
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/web 
+          publish_dir: build/web
+          force_orphan: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com' 
